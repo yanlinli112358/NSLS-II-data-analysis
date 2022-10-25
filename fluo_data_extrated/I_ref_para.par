@@ -1,0 +1,27 @@
+#File saved on Thu May 19 18:57:23 2022
+#Category: XFNTR
+#Function: XFNTR
+#Xrange=np.linspace(0.006, 0.03, 400)
+#Fit Range=0.008:0.082
+#Fit Method=Scipy-Least-Squares
+#Fit Scale=Linear
+#Fit Iterations=1000
+#Fixed Parameters:
+#param	value
+E	14.1
+topchem	He
+topden	0.000164
+botchem	I20K20H110619.569O55309.785
+botden	0.9997
+element	I
+line	La1
+vslit	0.04
+detlen	10
+#Single fitting parameters:
+#param	value	fit	min	max	expr	brute_step
+qoff	5.152803e-04	1	-inf	inf	None	0.1
+yscale	2.538896e-01	1	0	inf	None	0.1
+int_bg	0.000000e+00	0	0	inf	None	0.1
+Rc	0.000000e+00	0	-inf	inf	None	0.1
+sur_cov	0.000000e+00	0	0	inf	None	0.1
+ion_depth	0.000000e+00	0	0	inf	None	0.1

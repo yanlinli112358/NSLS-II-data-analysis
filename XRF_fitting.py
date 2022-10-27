@@ -99,17 +99,7 @@ def signal_fit(x, y, num_peaks, bkg_order, peak_centers):
     exec(s, globals())
     
     #curve fit the transformed function 'signal_total'
-    p0_para = []
-    countb = 0
-    while countb <= bkg_order:
-        p0_para.append(0)
-    countg = 0
-    while countg < num_peaks:
-        p0_para.append(50)
-        p0_para.append(100)
-        p0_para.append(peak_centers[countg])
-    print(p0)
-    para, pcov = curve_fit(signal_total, x, y)#, p0 = p0_para)
+    para, pcov = curve_fit(signal_total, x, y, p0 = [0, 50, 100, 3900, 50, 100, 4250])
     bkg_return = para[0: bkg_order + 1]
     gaussian_return = para[bkg_order + 1:]
     
@@ -126,6 +116,8 @@ def signal_fit(x, y, num_peaks, bkg_order, peak_centers):
     A1_sig1 = pcov[bkg_order + 1, bkg_order + 2]
     err = np.sqrt(abs(A1_err) / A1 ** 2 + abs(sig1_err) / sig1 ** 2 + 2 / sig1 / A1 * np.sqrt(abs(A1_sig1))) * intg_I
 
+    #PLOTS
+    plt.figure()
     #plot data
     plt.scatter(x,y)
     #plot fit
@@ -137,30 +129,48 @@ def signal_fit(x, y, num_peaks, bkg_order, peak_centers):
     exec(s2, globals())
     
     plt.plot(x, fit_y)
-
+    plt.show()
     #return
     return (intg_I, err)
 
 
-# #plot the spectra
-# x = np.linspace(low_e, high_e, (high_e - low_e)//10 + 1)
-# Qz, I =  get_data(filename, low_e, high_e)
-# plt.figure()
-# plt.ylabel('Intensity (counts)')
-# plt.xlabel('Energy (eV)')
-# for y in I:
-#     plt.scatter(x, y, linewidths= 0.2)
-# plt.show()
-#
-#
-# #plot the full spectra
-# plt.figure()
-# plt.ylabel('Intensity (counts)')
-# plt.xlabel('Energy (eV)')
-# for y in total_I:
-#     plt.scatter(np.linspace(10, 15000, len(y)), y, linewidths= 0.2)
-# plt.show()
+#plot the spectra
+x = np.linspace(low_e, high_e, (high_e - low_e)//10 + 1)
+Qz, I =  get_data(filename, low_e, high_e)
+print(Qz)
+print(I)
+plt.figure()
+plt.ylabel('Intensity (counts)')
+plt.xlabel('Energy (eV)')
+for y in I:
+    plt.scatter(x, y, linewidths= 0.2)
+plt.show()
 
+
+#plot the full spectra
+plt.figure()
+plt.ylabel('Intensity (counts)')
+plt.xlabel('Energy (eV)')
+for y in total_I:
+    plt.scatter(np.linspace(10, 15000, len(y)), y, linewidths= 0.2)
+plt.show()
+
+'''
+y = I[5]
+print(y)
+para, cov = curve_fit(gaussian, x, y, p0 = [2000, 100, 12000])
+print(para)
+A = para[0]
+sig = para[1]
+miu = para[2]
+print(A, sig, miu)
+fit_y = gaussian(x, A, sig, miu)
+
+plt.scatter(x,y)
+plt.plot(x, fit_y)
+print(quad(gaussian, low_e, high_e, args = (A, sig, miu)))
+
+'''
 
 ##integrate intensity, plot I vs energy and fitted curve
 plt.figure()
@@ -172,20 +182,19 @@ integrated_I = []
 err_I = []
 width = []
 
-##define fitting parameters for the peak
+#define fitting parameters for the peak
 num_peaks = 2
 bkg_order = 0
 peak_centers = [3920, 4220]
 
-plt.figure()
-for y in I[0:1]:
+for y in I:
     y = np.array(y)
     integrated_I_value, err_I_value = signal_fit(x, y, num_peaks, bkg_order, peak_centers)
     integrated_I.append(integrated_I_value)
     err_I.append(err_I_value)
-plt.show()
-print(integrated_I)
-print(err_I)
+
+#print(integrated_I)
+#print(err_I)
 # for y in I:
 #     y = np.array(y)
 #     maxy = max(y)
@@ -226,6 +235,7 @@ plt.errorbar(Qz, integrated_I, yerr = err_I, fmt = "o")
 plt.title(file)
 plt.ylabel('Intensity')
 plt.xlabel('Qz')
+plt.show()
 
 #write data into file
 f = open(savename, 'w')

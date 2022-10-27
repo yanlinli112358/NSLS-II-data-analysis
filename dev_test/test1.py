@@ -32,7 +32,7 @@ def signal_fit(x, num_peaks, bkg_order, *paras):
     s = "def signal_total(x"
                   
     var_n = 0
-    for v in paras:
+    while var_n <= (num_peaks*3 + bkg_order):
         s += ", " 
         s += "v"+str(var_n)
         var_n += 1
@@ -43,7 +43,8 @@ def signal_fit(x, num_peaks, bkg_order, *paras):
         s += ','
         s += 'v' + str(bkg_n)
         bkg_n +=1
-    s += ') \n' 
+    s += ') \n'
+    s += '    print(y)\n'
 
     n = 0
     while n < num_peaks:
@@ -51,6 +52,7 @@ def signal_fit(x, num_peaks, bkg_order, *paras):
         s += ','
         s += 'v' + str(bkg_order + 1 + n*3) + ', v' + str(bkg_order + 2 + n*3) + ', v' + str(bkg_order + 3 + n*3)
         s += ')\n'
+        s += '    print(y)\n'
         n += 1
     
     s += \
@@ -66,7 +68,11 @@ def signal_fit(x, num_peaks, bkg_order, *paras):
     print(s2)
     exec(s2, globals())
     
-    print(y[2])
+    print(y)
+    return y
 
-x = np.array([1, 2, 43, 6])
-signal_fit(x, 1, 1, 2.0, 4.0, 3.0, 4., 5.)
+x = np.array([1, 2, 4, 5])
+y = signal_fit(x, 2, 1, 2.0, 4.0, 2.0, 4., 5., 5., 5., 5.)
+
+plt.plot(x, y)
+plt.show()

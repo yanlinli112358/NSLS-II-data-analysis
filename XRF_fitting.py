@@ -43,11 +43,101 @@ print('totanumber of photon recieved by the detector is ' + str(int(total_counts
 
 
 #def gaussian function for fitting
-def gaussian(x, A, sig, miu, b):
-    y = A * np.exp(-1 * (x-miu)**2 / (2 * sig**2)) + b
+def gaussian(x, para):
+    A, sig, miu = para
+    y = A * np.exp(-1 * (x-miu)**2 / (2 * sig**2))
+    return y
+
+#def polynomial background
+def bkg(x, *coeffs):
+    n = 0
+    y = 0
+    while n < len(coeffs):
+        y += coeffs[n] * x**n
+        n += 1
     return y
 
 
+#def error processing
+def r_square(x, fit_x):
+    mean = np.sum(x)/len(x)
+    ss_res = np.sum((x-fit_x)**2)
+    ss_tot = np.sum((x - mean)**2)
+    r_square = 1 - ss_res/ss_tot
+    return r_square
+
+
+
+#def sum of peaks and curves   
+def signal_fit(x, y, num_peaks, peak_centers, bkg_order, *paras):
+    #transform the function to a function with fixed number of parameters
+    s = "def signal_total(x"
+                  
+    var_n = 0
+    for v in paras:
+        s += ", " 
+        s += "v"+str(var_n)
+        var_n += 1
+    s += '): \n'
+    s += "    y = bkg(x"
+    bkg_n = 0
+    while bkg_n <= bkg_order: 
+        s += ','
+        s += 'v' + str(bkg_n)
+        bkg_n +=1
+    s += ') \n' 
+
+    n = 0
+    while n < num_peaks:
+        s += "    y += gaussian(x "        
+        s += ','
+        s += 'v' + str(bkg_order + 1 + n*3) + ', v' + str(bkg_order + 2 + n*3) + ', v' + str(bkg_order + 3 + n*3)
+        s += ')\n'
+        n += 1
+    
+    s += \
+    "    return y"
+    exec(s, globals())
+    
+    #curve fit the transformed function 'signal_total'
+    para, pcov = curve_fit(signal_total, x, y)
+    bkg_return = para[0: bkg_order + 1]
+    gaussian_return = para[bkg_order + 1:]
+    
+    print('background parameters = ' + str(bkg_return))
+    print('gaussian parameters = ' + str(gaussian_return))
+    
+    #calculate integrated intensity
+    A1 = gaussian_return[0]
+    sig1 = gaussian_return[1]
+    intg_I = A1 * sig1
+    
+    #PLOTS
+    plt.figure()
+    #plot data
+    plt.scatter(x,y)
+    #plot fit
+    s2 = "fit_y = signal_total(x" 
+    for p in para:
+        s2 += p
+        s2 += ','
+    exec(s2, globals())
+    
+    plt.plot(x, fit_y)
+    
+    
+    #return
+    return intg_I
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 #plot the spectra
 x = np.linspace(low_e, high_e, (high_e - low_e)//10 + 1)
 Qz, I =  get_data(filename, low_e, high_e)
@@ -81,17 +171,13 @@ plt.plot(x, fit_y)
 print(quad(gaussian, low_e, high_e, args = (A, sig, miu)))
 
 '''
-def r_square(x, fit_x):
-    mean = np.sum(x)/len(x)
-    ss_res = np.sum((x-fit_x)**2)
-    ss_tot = np.sum((x - mean)**2)
-    r_square = 1 - ss_res/ss_tot
-    return r_square
 
 ##integrate intensity, plot I vs energy and fitted curve
 plt.figure()
 plt.ylabel('Intensity')
 plt.xlabel('Energy (eV)')
+
+
 
 integrated_I = []
 err_I = []
@@ -99,8 +185,9 @@ width = []
 for y in I:
     y = np.array(y)
     maxy = max(y)
-    para_bounds = ([0, 0, peak_center - 50, 0], [maxy, 400, peak_center + 50, maxy])
-    para, pcov = curve_fit(gaussian, x, y, p0 = [maxy, 100, peak_center, 0], bounds = para_bounds) ##fit
+    para_bounds = ([0, 0, peak_center - 50], [maxy, 400, peak_center + 50])
+    para_p0 = [maxy, 100, peak_center, 0]
+    para, pcov = curve_fit(lambda x, paras, coeffs: signal_fit(x, 2, 2, paras, coeffs), x, y, p0 = para_p0, bounds = para_bounds) ##fit
     print(para)
     width.append(para[1])
     A = para[0]

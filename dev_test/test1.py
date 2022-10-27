@@ -76,3 +76,19 @@ y = signal_fit(x, 2, 1, 2.0, 4.0, 2.0, 4., 5., 5., 5., 5.)
 
 plt.plot(x, y)
 plt.show()
+
+p0_list = []
+countb = 0
+bkg_order = 1
+num_peaks = 2
+peak_centers = [3920, 4250]
+while countb <= bkg_order:
+    p0_list.append(0)
+    countb += 1
+countg = 0
+while countg < num_peaks:
+    p0_list.append(50)
+    p0_list.append(100)
+    p0_list.append(peak_centers[countg])
+    countg += 1
+print("p0 = " + str(p0_list))

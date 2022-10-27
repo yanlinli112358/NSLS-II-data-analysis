@@ -99,7 +99,20 @@ def signal_fit(x, y, num_peaks, bkg_order, peak_centers):
     exec(s, globals())
     
     #curve fit the transformed function 'signal_total'
-    para, pcov = curve_fit(signal_total, x, y, p0 = [0, 50, 100, 3900, 50, 100, 4250])
+    p0_list = []
+    countb = 0
+    while countb <= bkg_order:
+        p0_list.append(0)
+        countb += 1
+    countg = 0
+    while countg < num_peaks:
+        p0_list.append(50)
+        p0_list.append(100)
+        p0_list.append(peak_centers[countg])
+        countg += 1
+    print("p0 = " + str(p0_list))
+
+    para, pcov = curve_fit(signal_total, x, y, p0 = p0_list)
     bkg_return = para[0: bkg_order + 1]
     gaussian_return = para[bkg_order + 1:]
     
@@ -137,8 +150,6 @@ def signal_fit(x, y, num_peaks, bkg_order, peak_centers):
 #plot the spectra
 x = np.linspace(low_e, high_e, (high_e - low_e)//10 + 1)
 Qz, I =  get_data(filename, low_e, high_e)
-print(Qz)
-print(I)
 plt.figure()
 plt.ylabel('Intensity (counts)')
 plt.xlabel('Energy (eV)')

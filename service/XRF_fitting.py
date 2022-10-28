@@ -5,35 +5,26 @@ Created on Mon Apr 18 13:37:09 2022
 
 @author: Rachel
 """
+import os
+import sys
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.optimize import curve_fit
+sys.path.append('../')
+from utils.input_output import get_data
 from scipy.integrate import quad
 from scipy.stats.mstats import chisquare
 
+#specify path
+#os.chdir('/')
+
 #inputs
 file = 's0'
-filename = 'fluo_data/' + file + '.csv'
-savename = 'fluo_data_extrated/' + file + '_flu.txt'
+filename = '../fluo_data/' + file + '.csv'
+savename = '../fluo_data_extrated/' + file + '_flu.txt'
+#low_e , high_e : energy range of interest
 low_e = 3600
 high_e = 4500
-
-#low_e , high_e : energy range of interest
-def get_data(filename, low_e, high_e):
-    Qz = []
-    I = []
-    f = open(filename, 'r')
-    line = f.readline()
-    line = f.readline()
-    while(line):
-        data = line.split(',')
-        Qz.append(float(data[0]))
-        y = [float(x) for x in data[low_e//10 : high_e//10 + 1]] # list of intensities in the range of interest
-        I.append(y) # I = 2D array of energies = energies each Qz
-        line = f.readline()
-    f.close()
-    return Qz, I
-
 
 # produce the total photon counts in the full spectra
 total_I = get_data(filename, 10, 40950)[1]

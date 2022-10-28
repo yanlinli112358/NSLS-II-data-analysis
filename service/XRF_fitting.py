@@ -16,12 +16,12 @@ from scipy.integrate import quad
 from scipy.stats.mstats import chisquare
 
 #specify path
-#os.chdir('/')
+os.chdir('/Users/rachel/NSLS_II_beamtrips/2022_10_trip')
 
 #inputs
 file = 's0'
-filename = '../fluo_data/' + file + '.csv'
-savename = '../fluo_data_extrated/' + file + '_flu.txt'
+filename = 'fluo_data/' + file + '.csv'
+savename = 'fluo_data_extracted/' + file + '_flu.txt'
 #low_e , high_e : energy range of interest
 low_e = 3600
 high_e = 4500

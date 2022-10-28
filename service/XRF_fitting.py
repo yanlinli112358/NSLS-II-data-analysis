@@ -12,19 +12,23 @@ import matplotlib.pyplot as plt
 from scipy.optimize import curve_fit
 sys.path.append('../')
 from utils.input_output import get_data
-from scipy.integrate import quad
-from scipy.stats.mstats import chisquare
 
 #specify path
 os.chdir('/Users/rachel/NSLS_II_beamtrips/2022_10_trip')
 
 #inputs
+##file reading and writing directory
 file = 's0'
 filename = 'fluo_data/' + file + '.csv'
 savename = 'fluo_data_extracted/' + file + '_flu.txt'
-#low_e , high_e : energy range of interest
+##low_e , high_e : energy range of interest
 low_e = 3600
 high_e = 4500
+##define fitting parameters for the peak
+num_peaks = 2
+bkg_order = 0
+peak_centers = [3920, 4220]
+
 
 # produce the total photon counts in the full spectra
 total_I = get_data(filename, 10, 40950)[1]
@@ -86,7 +90,7 @@ def signal_fit(x, y, num_peaks, bkg_order, peak_centers):
     
     s += \
     "    return y"
-    print(s)
+    #print(s)
     exec(s, globals())
     
     #curve fit the transformed function 'signal_total'
@@ -111,8 +115,8 @@ def signal_fit(x, y, num_peaks, bkg_order, peak_centers):
     bkg_return = para[0: bkg_order + 1]
     gaussian_return = para[bkg_order + 1:]
     
-    print('background parameters = ' + str(bkg_return))
-    print('gaussian parameters = ' + str(gaussian_return))
+    # print('background parameters = ' + str(bkg_return))
+    # print('gaussian parameters = ' + str(gaussian_return))
     
     #calculate integrated intensity and error
     A1 = gaussian_return[0]
@@ -158,22 +162,6 @@ for y in total_I:
     plt.scatter(np.linspace(10, 15000, len(y)), y, linewidths= 0.2)
 plt.show()
 
-'''
-y = I[5]
-print(y)
-para, cov = curve_fit(gaussian, x, y, p0 = [2000, 100, 12000])
-print(para)
-A = para[0]
-sig = para[1]
-miu = para[2]
-print(A, sig, miu)
-fit_y = gaussian(x, A, sig, miu)
-
-plt.scatter(x,y)
-plt.plot(x, fit_y)
-print(quad(gaussian, low_e, high_e, args = (A, sig, miu)))
-
-'''
 
 ##integrate intensity, plot I vs energy and fitted curve
 plt.figure()
@@ -185,11 +173,6 @@ integrated_I = []
 err_I = []
 width = []
 
-#define fitting parameters for the peak
-num_peaks = 2
-bkg_order = 0
-peak_centers = [3920, 4220]
-
 plt.figure()
 for y in I:
     y = np.array(y)
@@ -197,43 +180,11 @@ for y in I:
     integrated_I.append(integrated_I_value)
     err_I.append(err_I_value)
 plt.show()
-#print(integrated_I)
-#print(err_I)
-# for y in I:
-#     y = np.array(y)
-#     maxy = max(y)
-#     para_bounds = ([0, 0, peak_center - 50], [maxy, 400, peak_center + 50])
-#     para_p0 = [maxy, 100, peak_center, 0]
-#     para, pcov = curve_fit(lambda x, paras, coeffs: signal_fit(x, 2, 2, paras, coeffs), x, y, p0 = para_p0, bounds = para_bounds) ##fit
-#     print(para)
-#     width.append(para[1])
-#     A = para[0]
-#     sig = para[1]
-#     miu = para[2]
-#     b = para[3]
-#     fit_y = gaussian(x, A, sig, miu, b)
-#     r2 = r_square(y, fit_y)
-#     print(r2)
-#     plt.scatter(x, y, linewidths=0.5)
-#     plt.plot(x, fit_y)
-#     intg_I = A * sig #integrate
-#     err = np.sqrt(abs(pcov[0, 0])/A**2 +  abs(pcov[1, 1])/sig**2 + 2 / sig / A * np.sqrt(abs(pcov[0,1]))) * intg_I
-#     integrated_I.append(intg_I)
-#     err_I.append(err)
-
-#plot Qz vs width
-# plt.figure()
-# plt.scatter(Qz, width)
-# plt.title('peak width vs Qz')
-# plt.ylabel('peak width (eV)')
-# plt.xlabel('Qz(A^-1)')
-# plt.plot(Qz, [sum(width)/len(width)] * len(width), color = 'orange')
-# plt.text(0.06,75, 'total counts \n = ' + str(total_counts), bbox=dict(facecolor='orange', alpha=0.5))
 
 
 #plot integrated intensity vs Qz    
-print(integrated_I)
-print(err_I)
+#print(integrated_I)
+#print(err_I)
 plt.figure()
 plt.errorbar(Qz, integrated_I, yerr = err_I, fmt = "o")
 plt.title(file)

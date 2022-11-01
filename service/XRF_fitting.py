@@ -12,26 +12,30 @@ import matplotlib.pyplot as plt
 from scipy.optimize import curve_fit
 sys.path.append('../')
 from utils.input_output import get_data
+from utils.input_output import get_all_data
+from utils.input_output import get_qz
 
 #specify path
 os.chdir('/Users/rachel/NSLS_II_beamtrips/2022_10_trip_shared')
 
 #inputs
 ##file reading and writing directory
-file = 's1_1'
+file = 's2_1'
 filename = 'fluo_data/' + file + '.txt'
 savename = 'fluo_data_extracted/' + file + '_flu.txt'
 ##low_e , high_e : energy range of interest
-low_e = 2200
-high_e = 2850
+low_e = 11500
+high_e = 12200
 ##define fitting parameters for the peak
 num_peaks = 1
 bkg_order = 1
-peak_centers = [2620]
+peak_centers = [11920]
 
 
 # produce the total photon counts in the full spectra
-total_I = get_data(filename, 10, 40950)[1]
+Qz = get_qz('fluo_data/' + 'Qz.txt')
+
+total_I = get_all_data(filename, 10, 40950)
 total_counts = sum(sum(filter(lambda x: x>3, i)) for i in total_I)
 print('totanumber of photon recieved by the detector is ' + str(int(total_counts)))
 
@@ -145,7 +149,8 @@ def signal_fit(x, y, num_peaks, bkg_order, peak_centers):
 
 #plot the spectra
 x = np.linspace(low_e, high_e, (high_e - low_e)//10 + 1)
-Qz, I =  get_data(filename, low_e, high_e)
+I = get_all_data(filename, low_e, high_e)
+Qz = get_qz('fluo_data/Qz.txt')
 plt.figure()
 plt.ylabel('Intensity (counts)')
 plt.xlabel('Energy (eV)')
@@ -182,13 +187,16 @@ for y in I:
     err_I.append(err_I_value)
 plt.show()
 
+print(len(integrated_I))
+print(len(err_I))
+print(len(Qz))
 
 #plot integrated intensity vs Qz    
 #print(integrated_I)
 #print(err_I)
 plt.figure()
 plt.errorbar(Qz, integrated_I, yerr = err_I, fmt = "o")
-plt.title(file)
+plt.title(file + ' integrated intensity')
 plt.ylabel('Intensity')
 plt.xlabel('Qz')
 plt.show()

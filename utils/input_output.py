@@ -1,5 +1,8 @@
 import os
 
+os.chdir('/Users/rachel/NSLS_II_beamtrips/2022_10_trip_shared/fluo_data')
+path = os.getcwd()
+
 def get_data(filename, low_e, high_e):
     Qz = []
     I = []
@@ -27,3 +30,12 @@ def get_all_data(filename, low_e, high_e):
         line = f.readline()
     f.close()
     return I
+
+def get_qz(filename):
+    f = open(filename, 'r')
+    Qz_list = []
+    line = f.readline()
+    while(line):
+        Qz_list.append(float(line))
+        line = f.readline()
+    return Qz_list

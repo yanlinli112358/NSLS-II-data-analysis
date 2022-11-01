@@ -15,3 +15,15 @@ def get_data(filename, low_e, high_e):
         line = f.readline()
     f.close()
     return Qz, I
+
+def get_all_data(filename, low_e, high_e):
+    I = []
+    f = open(filename, 'r')
+    line = f.readline()
+    while(line):
+        data = line.split()
+        y = [float(x) for x in data[low_e//10 : high_e//10 + 1]]
+        I.append(y)
+        line = f.readline()
+    f.close()
+    return I

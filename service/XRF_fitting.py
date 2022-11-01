@@ -18,16 +18,16 @@ os.chdir('/Users/rachel/NSLS_II_beamtrips/2022_10_trip')
 
 #inputs
 ##file reading and writing directory
-file = 's0'
+file = 's2_2'
 filename = 'fluo_data/' + file + '.csv'
 savename = 'fluo_data_extracted/' + file + '_flu.txt'
 ##low_e , high_e : energy range of interest
-low_e = 3600
-high_e = 4500
+low_e = 11500
+high_e = 12200
 ##define fitting parameters for the peak
-num_peaks = 2
-bkg_order = 0
-peak_centers = [3920, 4220]
+num_peaks = 1
+bkg_order = 1
+peak_centers = [11920]
 
 
 # produce the total photon counts in the full spectra
@@ -174,6 +174,7 @@ err_I = []
 width = []
 
 plt.figure()
+plt.title(filename + '_fit')
 for y in I:
     y = np.array(y)
     integrated_I_value, err_I_value = signal_fit(x, y, num_peaks, bkg_order, peak_centers)

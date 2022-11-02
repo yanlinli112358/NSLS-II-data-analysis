@@ -20,8 +20,10 @@ os.chdir('/Users/rachel/NSLS_II_beamtrips/2022_10_trip_shared')
 
 #inputs
 ##file reading and writing directory
-file = 's2_2'
-filename = 'fluo_data/' + file + '.txt'
+file = 's2_2-b3aa2f9a-1199-4a3d-b9af-e05292c50c70'
+#filename = 'fluo_data/' + file + '.txt'
+filename = 'fluo_data_all/' + file + '.txt'
+Qz_name = 'fluo_data_all/Qz-' + file + '.txt'
 savename = 'fluo_data_extracted/' + file + '_flu.txt'
 ##low_e , high_e : energy range of interest
 low_e = 11500
@@ -148,10 +150,11 @@ def signal_fit(x, y, num_peaks, bkg_order, peak_centers):
 #plot the spectra
 x = np.linspace(low_e, high_e, (high_e - low_e)//10 + 1)
 I = get_all_data(filename, low_e, high_e)
-if len(I) == 17:
-    Qz = get_qz('fluo_data/Qz_17.txt')
-else:
-    Qz = get_qz('fluo_data/Qz.txt')
+# if len(I) == 17:
+#     Qz = get_qz('fluo_data/Qz_17.txt')
+# else:
+#     Qz = get_qz('fluo_data/Qz.txt')
+Qz = get_qz(Qz_name)
 plt.figure()
 plt.ylabel('Intensity (counts)')
 plt.xlabel('Energy (eV)')
@@ -179,14 +182,14 @@ integrated_I = []
 err_I = []
 width = []
 
-plt.figure()
-plt.title(filename + '_fit')
+#plt.figure()
+plt.title(file + '_fit')
 for y in I:
     y = np.array(y)
     integrated_I_value, err_I_value = signal_fit(x, y, num_peaks, bkg_order, peak_centers)
     integrated_I.append(integrated_I_value)
     err_I.append(err_I_value)
-plt.show()
+#plt.show()
 
 print(len(integrated_I))
 print(len(err_I))
@@ -200,7 +203,9 @@ plt.errorbar(Qz, integrated_I, yerr = err_I, fmt = "o")
 plt.title(file + ' integrated intensity')
 plt.ylabel('Intensity')
 plt.xlabel('Qz')
+plt.savefig('fluo_plots/' + file)
 plt.show()
+
 
 #write data into file
 f = open(savename, 'w')

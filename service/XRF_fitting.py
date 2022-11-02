@@ -20,7 +20,7 @@ os.chdir('/Users/rachel/NSLS_II_beamtrips/2022_10_trip_shared')
 
 #inputs
 ##file reading and writing directory
-file = 's2_1'
+file = 's2_2'
 filename = 'fluo_data/' + file + '.txt'
 savename = 'fluo_data_extracted/' + file + '_flu.txt'
 ##low_e , high_e : energy range of interest
@@ -33,8 +33,6 @@ peak_centers = [11920]
 
 
 # produce the total photon counts in the full spectra
-Qz = get_qz('fluo_data/' + 'Qz.txt')
-
 total_I = get_all_data(filename, 10, 40950)
 total_counts = sum(sum(filter(lambda x: x>3, i)) for i in total_I)
 print('totanumber of photon recieved by the detector is ' + str(int(total_counts)))
@@ -150,7 +148,10 @@ def signal_fit(x, y, num_peaks, bkg_order, peak_centers):
 #plot the spectra
 x = np.linspace(low_e, high_e, (high_e - low_e)//10 + 1)
 I = get_all_data(filename, low_e, high_e)
-Qz = get_qz('fluo_data/Qz.txt')
+if len(I) == 17:
+    Qz = get_qz('fluo_data/Qz_17.txt')
+else:
+    Qz = get_qz('fluo_data/Qz.txt')
 plt.figure()
 plt.ylabel('Intensity (counts)')
 plt.xlabel('Energy (eV)')

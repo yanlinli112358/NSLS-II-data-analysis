@@ -13,7 +13,7 @@ l_iter = iter(listdir)
 f1 = next(l_iter)
 while f1 != 'end':
     f2 = next(l_iter, 'end')
-    if f2 == 'end'
+    if f2 == 'end':
         break
     f1_dir = os.path.join(path, f1)
     f2_dir = os.path.join(path, f2)

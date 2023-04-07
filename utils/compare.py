@@ -1,6 +1,8 @@
 import os
 import filecmp
 
+#Remove identical files from folder
+
 os.chdir('/Users/rachel/NSLS_II_beamtrips/2022_10_trip_shared/fluo_data')
 path = os.getcwd()
 print(path)

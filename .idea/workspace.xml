@@ -2,9 +2,16 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b2e2496f-6314-47f1-ae0a-657caff61af0" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/service/XRR_BNL_to_APS.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/utils/xray_database.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev_test/local_test1.py" beforeDir="false" afterPath="$PROJECT_DIR$/dev_test/local_test1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev_test/test1.py" beforeDir="false" afterPath="$PROJECT_DIR$/dev_test/test1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/service/XRF_fitting.py" beforeDir="false" afterPath="$PROJECT_DIR$/service/XRF_fitting.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/service/XRR_batch_process.py" beforeDir="false" afterPath="$PROJECT_DIR$/service/XRR_batch_process.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/utils/compare.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils/compare.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/utils/fit_functions.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils/fit_functions.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/utils/input_output.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils/input_output.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -25,6 +32,10 @@
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+    <option name="showPreview" value="true" />
+  </component>
   <component name="ProjectId" id="2GhNsfIes7UhHgr7geZrADsba1J" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -40,6 +51,7 @@
   },
   &quot;keyToStringList&quot;: {
     &quot;com.intellij.ide.scratch.ScratchImplUtil$2/New Scratch File&quot;: [
+      &quot;Python&quot;,
       &quot;TEXT&quot;
     ]
   }
@@ -86,7 +98,13 @@
       <workItem from="1666837065843" duration="1718000" />
       <workItem from="1666838793073" duration="1163000" />
       <workItem from="1666844838695" duration="29943000" />
-      <workItem from="1667278372867" duration="12725000" />
+      <workItem from="1667278372867" duration="21231000" />
+      <workItem from="1668380294382" duration="20631000" />
+      <workItem from="1672938751203" duration="6269000" />
+      <workItem from="1675802840602" duration="10952000" />
+      <workItem from="1675981218051" duration="3000" />
+      <workItem from="1677202730510" duration="2902000" />
+      <workItem from="1677557697781" duration="43424000" />
     </task>
     <servers />
   </component>

@@ -91,7 +91,7 @@ def signal_fit(x, y, num_peaks, bkg_order, peak_centers):
     A1_err = pcov[bkg_order + 1, bkg_order + 1]
     sig1_err = pcov[bkg_order + 2, bkg_order + 2]
     A1_sig1 = pcov[bkg_order + 1, bkg_order + 2]
-    err = np.sqrt(abs(A1_err) / A1 ** 2 + abs(sig1_err) / sig1 ** 2 + 2 / sig1 / A1 * np.sqrt(abs(A1_sig1))) * intg_I
+    err = np.sqrt(abs(A1_err) / (A1 ** 2) + abs(sig1_err) / (sig1 ** 2) + 2 * np.sqrt(abs(A1_sig1))/sig1/A1) * intg_I
 
     # plot data
     plt.scatter(x, y)
@@ -105,3 +105,16 @@ def signal_fit(x, y, num_peaks, bkg_order, peak_centers):
     exec(s2, globals(), {'x': x}) #x become local variable??
 
     return (intg_I, err)
+
+from scipy.signal import butter, filtfilt
+def butter_lowpass(cutoff, fs, order=5):
+    nyquist_freq = 0.5 * fs
+    normal_cutoff = cutoff / nyquist_freq
+    b, a = butter(order, normal_cutoff, btype='low', analog=False)
+    return b, a
+
+def apply_filter(data, cutoff_freq, sampling_freq, filter_order=5):
+    b, a = butter_lowpass(cutoff_freq, sampling_freq, filter_order)
+    filtered_data = filtfilt(b, a, data)
+    return filtered_data
+

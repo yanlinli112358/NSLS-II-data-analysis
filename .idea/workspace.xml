@@ -2,16 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b2e2496f-6314-47f1-ae0a-657caff61af0" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/utils/xray_database.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/service/XRF_processing.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/service/test.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/utils/simple_purpose_functions.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev_test/local_test1.py" beforeDir="false" afterPath="$PROJECT_DIR$/dev_test/local_test1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev_test/test1.py" beforeDir="false" afterPath="$PROJECT_DIR$/dev_test/test1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/service/XRF_fitting.py" beforeDir="false" afterPath="$PROJECT_DIR$/service/XRF_fitting.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/service/XRR_batch_process.py" beforeDir="false" afterPath="$PROJECT_DIR$/service/XRR_batch_process.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/utils/compare.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils/compare.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/utils/fit_functions.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils/fit_functions.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/utils/input_output.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils/input_output.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/utils/xray_database.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils/xray_database.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -104,7 +103,11 @@
       <workItem from="1675802840602" duration="10952000" />
       <workItem from="1675981218051" duration="3000" />
       <workItem from="1677202730510" duration="2902000" />
-      <workItem from="1677557697781" duration="43424000" />
+      <workItem from="1677557697781" duration="47583000" />
+      <workItem from="1682406040413" duration="1202000" />
+      <workItem from="1682412424505" duration="866000" />
+      <workItem from="1686190717889" duration="41083000" />
+      <workItem from="1692065297629" duration="24770000" />
     </task>
     <servers />
   </component>

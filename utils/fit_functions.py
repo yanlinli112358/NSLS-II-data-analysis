@@ -45,7 +45,6 @@ def signal_fit(x, y, num_peaks, bkg_order, peak_centers):
         s += 'v' + str(bkg_n)
         bkg_n += 1
     s += ') \n'
-
     n = 0
     while n < num_peaks:
         s += "    y += gaussian(x "
@@ -53,30 +52,42 @@ def signal_fit(x, y, num_peaks, bkg_order, peak_centers):
         s += 'v' + str(bkg_order + 1 + n * 3) + ', v' + str(bkg_order + 2 + n * 3) + ', v' + str(bkg_order + 3 + n * 3)
         s += ')\n'
         n += 1
-
     s += \
         "    return y"
-    print(s)
+    #print(s)
     exec(s, globals())
 
     # curve fit the transformed function 'signal_total'
     ##determine initial guess and bounds
     maxy = max(y)
     p0_list = []
+    lower_bound_list = []
+    upper_bound_list = []
 
     countb = 0
     while countb <= bkg_order:
         p0_list.append(0)
+        lower_bound_list.append(float('-inf'))
+        upper_bound_list.append(float('inf'))
         countb += 1
     countg = 0
     while countg < num_peaks:
         p0_list.append(maxy)
         p0_list.append(100)
         p0_list.append(peak_centers[countg])
+
+        lower_bound_list.append(0)
+        lower_bound_list.append(0)
+        lower_bound_list.append(peak_centers[countg] - 100)
+
+        upper_bound_list.append(float('inf'))
+        upper_bound_list.append(200)
+        upper_bound_list.append(peak_centers[countg] + 100)
         countg += 1
+    bound_tuple = (lower_bound_list, upper_bound_list)
 
     ##fit
-    para, pcov = curve_fit(signal_total, x, y, p0=p0_list)
+    para, pcov = curve_fit(signal_total, x, y, p0=p0_list, maxfev=5000, bounds = bound_tuple)
     bkg_return = para[0: bkg_order + 1]
     gaussian_return = para[bkg_order + 1:]
 
@@ -91,7 +102,7 @@ def signal_fit(x, y, num_peaks, bkg_order, peak_centers):
     A1_err = pcov[bkg_order + 1, bkg_order + 1]
     sig1_err = pcov[bkg_order + 2, bkg_order + 2]
     A1_sig1 = pcov[bkg_order + 1, bkg_order + 2]
-    err = np.sqrt(abs(A1_err) / (A1 ** 2) + abs(sig1_err) / (sig1 ** 2) + 2 * np.sqrt(abs(A1_sig1))/sig1/A1) * intg_I
+    err = np.sqrt(abs(A1_err) / (A1 ** 2) + abs(sig1_err) / (sig1 ** 2) + 2 * np.sqrt(abs(A1_sig1))/sig1/A1) * abs(intg_I)
 
     # plot data
     plt.scatter(x, y)
@@ -117,4 +128,26 @@ def apply_filter(data, cutoff_freq, sampling_freq, filter_order=5):
     b, a = butter_lowpass(cutoff_freq, sampling_freq, filter_order)
     filtered_data = filtfilt(b, a, data)
     return filtered_data
+
+'''instead of fitting a gaussian through the peak, sum the total count
+over a range of energies that includes the peak'''
+
+def total_counts_in_range(filename, low_e, high_e):
+    from utils.input_output import get_data
+    Qz, I = get_data(filename, low_e, high_e)
+    total_counts_list = []
+    for counts in I:
+        total_counts = sum(counts)
+        total_counts_list.append(total_counts)
+    # print(energy[i])
+    # while (energy[i] < low_e):
+    #     print(energy[i])
+    #     i += 1
+    #     print(energy[i])
+    # while (low_e <= energy[i] and energy[i] <= high_e):
+    #     total_counts += counts[i]
+    return Qz, total_counts_list
+
+# def noise_level(low_e, high_e, energy, counts):
+#
 

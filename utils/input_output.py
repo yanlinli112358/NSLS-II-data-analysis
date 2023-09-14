@@ -1,13 +1,14 @@
+import csv
 import os
+import numpy as np
 
-os.chdir('/Users/rachel/NSLS_II_beamtrips/2022_10_trip_shared/fluo_data')
+os.chdir('/Users/rachel/NSLS_II_beamtrips/2023_7_during_trip/XRF_data')
 path = os.getcwd()
 
 
 def get_data(filename, low_e, high_e): #get XF counts from fluo_data in the range of low_e to high_e
     Qz = []
     I = []
-    print(os.getcwd())
     f = open(filename, 'r')
     line = f.readline()
     line = f.readline()
@@ -81,5 +82,23 @@ def get_total_counts(filename): #returns a list of total counts at each Qz
         total_counts.append(total)
         line = f.readline()
     return total_counts
+
+def get_data_complete(filename):
+    return get_data(filename, 10, 40950)
+def remove_bkg_complete(filename, bkg_file):
+    savename = filename[:-4] + 'no_bkg' + '.csv'
+    f = open(savename, 'w')
+    writer = csv.writer(f)
+    writer.writerow(np.linspace(10, 40950, 4095))
+
+    Qz, I = get_data_complete(filename)
+    Qz_bkg, I_bkg = get_data_complete(bkg_file)
+    I_no_bkg = []
+    for i in range(len(I)):
+        new_y = np.array(I[i]) - np.array(I_bkg[i])
+        I_no_bkg.append(new_y)
+        writer.writerow(Qz[i] + new_y)
+    f.close()
+    return Qz, I_no_bkg
 
 

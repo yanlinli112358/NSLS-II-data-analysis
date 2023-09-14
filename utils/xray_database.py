@@ -1,8 +1,8 @@
 spectrum_dict = {
     'Cl': {
         'peak_centers': [2622],
-        'low_e': 2300,
-        'high_e': 2800,
+        'low_e': 2200,
+        'high_e': 2850,
         'num_peaks': 1
     },
     'Br': {
@@ -13,8 +13,8 @@ spectrum_dict = {
     },
     'I': {
         'peak_centers': [3937, 4220],
-        'low_limit': 3550,
-        'high_limit': 4500,
+        'low_e': 3500,
+        'high_e': 4700,
         'num_peaks': 2
     }
 }

@@ -12,9 +12,9 @@ import numpy as np
 Run this python file to batch process BNL XRR data into rrf and ref data
 """
 import os
-path = '/Users/rachel/NSLS_II_beamtrips/2023_7_trip_shared/XRR_analysis'
+path = '/Users/rachel/NSLS_II_beamtrips/2024_4_trip_final/XRR_analysis'
 os.chdir(path)
-read_folder = 'data4'
+read_folder = 'data'
 rrf_read_folder = 'data3'
 ref_read_folder = 'data2'
 path_read = os.path.join(path, read_folder)

@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.optimize import curve_fit
+from utils.input_output import get_data
 
 # def gaussian function for fitting
 def gaussian(x, A, sig, miu):
@@ -29,6 +30,8 @@ def r_square(x, fit_x):
 
 # def sum of peaks and curves
 def signal_fit(x, y, num_peaks, bkg_order, peak_centers):
+    #x is usually the erergies on the x-axis
+    #y is unually the detector counts/XF intensity on the y-axis
     # transform the function to a function with fixed number of parameters
     s = "def signal_total(x"
 
@@ -78,11 +81,11 @@ def signal_fit(x, y, num_peaks, bkg_order, peak_centers):
 
         lower_bound_list.append(0)
         lower_bound_list.append(0)
-        lower_bound_list.append(peak_centers[countg] - 100)
+        lower_bound_list.append(peak_centers[countg] - 50)
 
         upper_bound_list.append(float('inf'))
         upper_bound_list.append(200)
-        upper_bound_list.append(peak_centers[countg] + 100)
+        upper_bound_list.append(peak_centers[countg] + 50)
         countg += 1
     bound_tuple = (lower_bound_list, upper_bound_list)
 
@@ -148,6 +151,36 @@ def total_counts_in_range(filename, low_e, high_e):
     #     total_counts += counts[i]
     return Qz, total_counts_list
 
-# def noise_level(low_e, high_e, energy, counts):
-#
+def integrated_intensity(filename, scale_factor, bkg_order, element_unique_paras):
+    peak_centers, high_e, low_e, num_peaks = element_unique_paras
 
+    x = np.linspace(low_e, high_e, (high_e - low_e)//10 + 1)
+    Qz = np.array(get_data(filename, low_e, high_e)[0])
+    I = np.array(get_data(filename, low_e, high_e)[1])
+    integrated_I = []
+    err_I = []
+    width = []
+    for y in I:
+        y = np.array(y)
+        x = np.array(x)
+        integrated_I_value, err_I_value = signal_fit(x, y, num_peaks, bkg_order, peak_centers)
+        integrated_I.append(integrated_I_value/scale_factor)
+        err_I.append(err_I_value/scale_factor)
+    print(integrated_I)
+    return [integrated_I, err_I, width]
+
+#fitting by summing over all the photon counts over the range of the element's peaks
+def signal_fit_sum(counts_data_list, counts_bkg_list, energies, qz, low_e_bond, high_e_bond):
+    sum_intensity_list = []
+    for i in range(len(qz)):
+        data_cleaned = np.array(counts_data_list[i]) - np.array(counts_bkg_list[i])
+
+        sum_counts = 0
+        j = 0
+        while energies[j] < high_e_bond:
+            if energies[j] > low_e_bond:
+                sum_counts += data_cleaned[j]
+            j += 1
+
+        sum_intensity_list.append(sum_counts)
+    return qz, sum_intensity_list

@@ -5,10 +5,10 @@ import matplotlib.pyplot as plt
 
 from utils.input_output import get_data
 #specify path
-path = '/Users/rachel/NSLS_II_beamtrips/2023_7_trip_shared/XRF_data'
+path = '/Users/rachel/NSLS_II_beamtrips/2023_10_during_trip/XRF_data'
 os.chdir(path)
 
-file = 'Fluo_data_col[energies]_rows[qz]-0P1mM_KI_ODA-c4c6a500'
+file = 'Fluo_data_col[energies]_rows[qz]-s3_20mM_KCl_only_XFonly-42b805b1'
 filename = file + '.csv'
 
 #energy_bonds

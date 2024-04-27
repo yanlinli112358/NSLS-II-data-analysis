@@ -6,7 +6,9 @@ os.chdir('/Users/rachel/NSLS_II_beamtrips/2023_7_during_trip/XRF_data')
 path = os.getcwd()
 
 
-def get_data(filename, low_e, high_e): #get XF counts from fluo_data in the range of low_e to high_e
+def get_data(filename, low_e = 0, high_e = 40950.0):
+    #get XF counts from fluo_data in the range of low_e to high_e
+    #default energy range is the full detector spectra
     Qz = []
     I = []
     f = open(filename, 'r')
@@ -100,5 +102,16 @@ def remove_bkg_complete(filename, bkg_file):
         writer.writerow(Qz[i] + new_y)
     f.close()
     return Qz, I_no_bkg
+
+def save_XF(savename, Qz, intensity_set, err_set):
+    f = open(savename, 'w')
+    for i in range(len(intensity_set)):
+        line = str(Qz[i]) + ' ' + str(intensity_set[i]) + ' ' + str(err_set[i])
+        f.writelines(line)
+        f.write('\n')
+    f.close()
+    return None
+
+
 
 
